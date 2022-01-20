@@ -1,0 +1,11 @@
+{
+  "name": "blog-post",
+  "version": "1.0.0",
+  "description": "Blog Post",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Saliou",
+  "license": "ISC"
+}
