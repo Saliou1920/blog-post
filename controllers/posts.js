@@ -1,10 +1,19 @@
 const axios = require("axios");
 const apiUrl = "https://api.hatchways.io/assessment/blog/posts?";
+const NodeCache = require("node-cache");
+const cache = new NodeCache();
 
 const DEFAULT_EXPIRATION_TIME = 3600;
 
 const fetchPosts = async (tag) => {
-  const url = `${apiUrl}tags=${tag}`;
+  const url = `${apiUrl}tag=${tag}`;
+
+  try {
+    const { data } = await axios.get(url);
+    return data.posts;
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const getAllPosts = async (req, res) => {
@@ -15,6 +24,13 @@ const getAllPosts = async (req, res) => {
   }
 
   if (tags || sortBy) {
+    const cacheKey = `${tags}-${sortBy}-${direction}`;
+    const cachedPosts = cache.get(cacheKey);
+
+    if (cachedPosts) {
+      return res.status(200).json({ cachedPosts });
+    }
+
     const posts = await Promise.all(
       tags.split(",").map((tag) => fetchPosts(tag))
     );
@@ -28,7 +44,9 @@ const getAllPosts = async (req, res) => {
         return res.status(400).json({ error: "sortBy parameter is invalid" });
       }
     });
-    return res.status(200).json({ sortedPosts });
+
+    cache.set(cacheKey, sortedPosts, DEFAULT_EXPIRATION_TIME);
+    return res.status(200).json(sortedPosts);
   }
 };
 
