@@ -15,7 +15,7 @@ const getAllPosts = async (req, res) => {
   const { tags, sortBy = "id", direction = "asc" } = req.query;
 
   if (!tags) {
-    return res.status(400).json({ error: "Missing tags" });
+    return res.status(400).json({ error: "Tags parameter is required" });
   }
 
   if (tags || sortBy) {
@@ -29,7 +29,7 @@ const getAllPosts = async (req, res) => {
       if (direction === "desc") {
         return parseFloat(b[sortBy]) - parseFloat(a[sortBy]);
       } else {
-        return res.status(400).json({ error: "Invalid sort direction" });
+        return res.status(400).json({ error: "sortBy parameter is invalid" });
       }
     });
     return res.status(200).json({ sortedPosts });
