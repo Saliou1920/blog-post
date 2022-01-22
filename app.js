@@ -7,6 +7,7 @@ const errorMiddleware = require("./middleware/errorHandler");
 
 // Security
 const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 const express = require("express");
 const app = express();
@@ -20,7 +21,12 @@ app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 
 app.use(helmet());
-app.use(helmet.hidePoweredBy());
+app.use(
+  rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 100,
+  })
+);
 
 const port = process.env.PORT || 3000;
 
