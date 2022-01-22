@@ -28,6 +28,6 @@ describe("GET /api/posts", () => {
   it("should return missing tags", async () => {
     const response = await request(app).get("/");
     expect(response.status).toBe(400);
-    expect(response.body).toEqual({ error: "Missing tags" });
+    expect(response.body).toEqual({ error: "Tags parameter is required" });
   });
 });
