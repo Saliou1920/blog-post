@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { getAllPosts, getPostByTag } = require("../controllers/posts");
+const { getAllPosts } = require("../controllers/posts");
 
 router.get("/api/ping", (req, res) => {
-  res.status(200).send({ success: true });
+  res.status(200).json({ success: true });
 });
 
-router.get("/api/posts", getAllPosts);
-router.get("/api/posts/:tag", getPostByTag);
+router.get("/", getAllPosts);
 
 module.exports = router;
